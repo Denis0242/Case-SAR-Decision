@@ -54,17 +54,10 @@ The final approved dashboard uses one visualization color only: blue, with light
 
 ![Top 5 Investigation Red Flags](images/04_top_investigation_red_flags.png)
 
-## Resume Bullets
-**AML Case Investigation & SAR Decision Analytics | SQL, Python, Tableau, Streamlit**
-- Built an end-to-end AML case-investigation analytics project across 240 synthetic cases, combining KYC context, transaction lookback analysis, red-flag indicators, case-risk scoring, investigation summaries, and SAR decision support.
-- Developed SQL investigation queries and Tableau/Streamlit reporting for case prioritization, aging, SAR conversion, escalation monitoring, and reviewed transaction exposure.
 
-## Interview Explanation
-“I built this project to simulate the stage after an AML alert is escalated into a case. I reviewed customer KYC context and transaction activity over defined lookback periods, analyzed red flags, created an explainable case-risk score, documented the investigation outcome, and tracked whether the case was closed, escalated further, or moved to SAR consideration. SQL supports the investigation logic, Python prepares and analyzes the data, Tableau shows management trends, and Streamlit provides an investigator-style case review workflow.”
 
 ## Disclaimer
 All customers, transactions, investigation cases, notes, and SAR decisions are synthetic and created for educational portfolio use only.
 
 
-## Approved Final Dashboard
-Project 5 now uses the approved single-blue dashboard design. It contains six KPI cards and exactly six analytical visualizations. The packaged `images/02_executive_dashboard.png` is the final visual reference.
+

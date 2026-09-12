@@ -1,0 +1,63 @@
+case_id,customer_id,created_date,case_risk_score,priority,reviewed_amount,primary_red_flag,disposition,sar_decision_reason,sar_id,sar_status,filing_date
+CASE0001,CUST10180,2026-03-27,60,Moderate,148832.22,Unusual Volume,SAR Filed,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0001,Filed,2026-04-01
+CASE0002,CUST10882,2026-09-11,51,High,192781.88,Structuring,SAR Filed,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0002,Filed,2026-09-20
+CASE0005,CUST10433,2026-04-21,73,High,80237.59,Rapid Movement,SAR Filed,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0003,Filed,2026-04-25
+CASE0008,CUST10229,2026-07-25,51,Moderate,15355.69,Unusual Volume,SAR Filed,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0004,Filed,2026-08-03
+CASE0016,CUST10736,2026-07-16,67,High,157161.23,High-Risk Jurisdiction,SAR Recommended,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0005,Recommended,2026-07-31
+CASE0024,CUST10790,2026-05-05,72,High,140818.94,Unusual Volume,SAR Filed,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0006,Filed,2026-05-07
+CASE0026,CUST10469,2026-07-26,58,Moderate,69201.42,Funnel Activity,SAR Filed,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0007,Filed,2026-08-10
+CASE0027,CUST10484,2026-06-01,49,Low,43832.5,Structuring,SAR Recommended,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0008,Recommended,2026-06-15
+CASE0031,CUST10471,2026-07-02,68,High,332500.79,Funnel Activity,SAR Recommended,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0009,Recommended,2026-07-10
+CASE0035,CUST10043,2026-08-12,77,High,14590.39,Activity Inconsistent with Profile,SAR Recommended,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0010,Recommended,2026-08-25
+CASE0041,CUST10719,2026-03-09,64,Moderate,76160.11,Unusual Volume,SAR Filed,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0011,Filed,2026-03-22
+CASE0042,CUST10580,2026-05-19,84,Critical,7708.99,Activity Inconsistent with Profile,SAR Filed,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0012,Filed,2026-05-27
+CASE0044,CUST10684,2026-07-29,83,Critical,427557.92,Unusual Volume,SAR Filed,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0013,Filed,2026-08-13
+CASE0047,CUST10586,2026-08-13,54,Moderate,25470.23,Activity Inconsistent with Profile,SAR Recommended,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0014,Recommended,2026-08-22
+CASE0050,CUST10645,2026-06-16,51,Moderate,6051.48,High-Risk Jurisdiction,SAR Recommended,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0015,Recommended,2026-06-28
+CASE0051,CUST10836,2026-04-10,69,High,27215.34,Activity Inconsistent with Profile,SAR Filed,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0016,Filed,2026-04-17
+CASE0055,CUST10488,2026-01-30,69,High,40834.01,Funnel Activity,SAR Filed,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0017,Filed,2026-02-09
+CASE0056,CUST10498,2026-06-14,56,High,48771.99,Structuring,SAR Recommended,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0018,Recommended,2026-06-24
+CASE0060,CUST10557,2026-04-15,75,High,35653.12,Structuring,SAR Filed,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0019,Filed,2026-04-22
+CASE0062,CUST10143,2026-06-04,44,High,184603.41,Structuring,SAR Recommended,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0020,Recommended,2026-06-06
+CASE0065,CUST10839,2026-03-14,63,Moderate,44978.13,Activity Inconsistent with Profile,SAR Filed,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0021,Filed,2026-03-25
+CASE0077,CUST10015,2026-08-10,62,Critical,17794.81,Rapid Movement,SAR Filed,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0022,Filed,2026-08-20
+CASE0101,CUST10281,2026-03-02,62,Critical,24196.29,Structuring,SAR Filed,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0023,Filed,2026-03-11
+CASE0104,CUST10336,2026-01-12,47,Critical,69262.27,High-Risk Jurisdiction,SAR Recommended,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0024,Recommended,2026-01-16
+CASE0105,CUST10199,2026-05-23,73,High,191227.21,Unusual Volume,SAR Filed,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0025,Filed,2026-05-30
+CASE0109,CUST10774,2026-02-12,76,High,134327.3,Activity Inconsistent with Profile,SAR Filed,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0026,Filed,2026-02-25
+CASE0115,CUST10345,2026-06-08,65,High,60697.95,Funnel Activity,SAR Filed,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0027,Filed,2026-06-18
+CASE0116,CUST10170,2026-01-28,53,Moderate,172248.93,Unusual Volume,SAR Filed,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0028,Filed,2026-02-07
+CASE0123,CUST10110,2026-04-29,67,High,215150.43,Unusual Volume,SAR Filed,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0029,Filed,2026-05-01
+CASE0125,CUST10141,2026-07-08,77,High,8792.05,Structuring,SAR Filed,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0030,Filed,2026-07-11
+CASE0128,CUST10035,2026-04-01,59,High,58683.28,High-Risk Jurisdiction,SAR Filed,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0031,Filed,2026-04-05
+CASE0132,CUST10494,2026-07-26,64,Moderate,240470.73,High-Risk Jurisdiction,SAR Recommended,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0032,Recommended,2026-08-09
+CASE0134,CUST10759,2026-01-15,74,High,165987.04,High-Risk Jurisdiction,SAR Filed,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0033,Filed,2026-01-21
+CASE0136,CUST10171,2026-05-06,58,High,25227.95,Funnel Activity,SAR Recommended,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0034,Recommended,2026-05-13
+CASE0138,CUST10496,2026-02-10,49,Low,48123.42,Rapid Movement,SAR Filed,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0035,Filed,2026-02-19
+CASE0141,CUST10638,2026-05-29,56,Moderate,221995.06,Structuring,SAR Recommended,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0036,Recommended,2026-06-04
+CASE0144,CUST10292,2026-01-22,71,Critical,65771.35,Structuring,SAR Recommended,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0037,Recommended,2026-01-30
+CASE0147,CUST10088,2026-06-29,43,Low,125942.05,Structuring,SAR Recommended,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0038,Recommended,2026-07-09
+CASE0148,CUST10617,2026-05-27,56,Moderate,27748.41,Structuring,SAR Filed,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0039,Filed,2026-06-09
+CASE0154,CUST10764,2026-07-14,55,High,59004.92,Unusual Volume,SAR Filed,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0040,Filed,2026-07-28
+CASE0156,CUST10284,2026-01-16,51,Moderate,128247.55,Funnel Activity,SAR Recommended,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0041,Recommended,2026-01-22
+CASE0159,CUST10107,2026-02-06,79,High,234098.3,Activity Inconsistent with Profile,SAR Recommended,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0042,Recommended,2026-02-08
+CASE0162,CUST10466,2026-02-17,46,Low,678500.54,Structuring,SAR Recommended,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0043,Recommended,2026-03-04
+CASE0164,CUST10286,2026-06-10,76,High,26890.77,Funnel Activity,SAR Recommended,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0044,Recommended,2026-06-15
+CASE0178,CUST10554,2026-08-15,40,High,16120.35,Unusual Volume,SAR Recommended,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0045,Recommended,2026-08-20
+CASE0179,CUST10695,2026-03-19,51,Moderate,9884.02,Rapid Movement,SAR Filed,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0046,Filed,2026-04-02
+CASE0181,CUST10321,2026-07-23,65,High,272552.25,Activity Inconsistent with Profile,SAR Filed,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0047,Filed,2026-07-26
+CASE0190,CUST10680,2026-07-09,40,High,28426.32,Funnel Activity,SAR Filed,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0048,Filed,2026-07-11
+CASE0192,CUST10280,2026-02-05,74,High,308726.22,Unusual Volume,SAR Recommended,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0049,Recommended,2026-02-14
+CASE0193,CUST10604,2026-07-17,52,Moderate,41480.07,Activity Inconsistent with Profile,SAR Filed,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0050,Filed,2026-07-24
+CASE0196,CUST10567,2026-05-14,49,Low,137205.42,High-Risk Jurisdiction,SAR Filed,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0051,Filed,2026-05-17
+CASE0197,CUST10324,2026-08-04,68,High,211557.05,Funnel Activity,SAR Recommended,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0052,Recommended,2026-08-10
+CASE0206,CUST10475,2026-08-19,92,Critical,219868.23,Funnel Activity,SAR Recommended,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0053,Recommended,2026-08-22
+CASE0208,CUST10506,2026-03-05,77,Critical,4848.24,Unusual Volume,SAR Recommended,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0054,Recommended,2026-03-09
+CASE0210,CUST10584,2026-06-14,67,High,63457.44,Funnel Activity,SAR Recommended,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0055,Recommended,2026-06-17
+CASE0213,CUST10071,2026-09-04,71,High,12463.61,Rapid Movement,SAR Filed,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0056,Filed,2026-09-11
+CASE0216,CUST10219,2026-03-18,61,Moderate,22078.32,Funnel Activity,SAR Recommended,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0057,Recommended,2026-03-21
+CASE0220,CUST10588,2026-01-29,58,Critical,73621.6,Activity Inconsistent with Profile,SAR Recommended,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0058,Recommended,2026-02-04
+CASE0228,CUST10885,2026-05-27,63,Critical,480588.24,Funnel Activity,SAR Filed,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0059,Filed,2026-06-02
+CASE0230,CUST10768,2026-02-09,74,High,20304.91,Structuring,SAR Recommended,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0060,Recommended,2026-02-13
+CASE0236,CUST10275,2026-02-22,44,Low,82441.99,Rapid Movement,SAR Filed,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0061,Filed,2026-03-07
+CASE0238,CUST10247,2026-05-22,42,Low,25752.29,Funnel Activity,SAR Filed,Activity showed multiple unexplained red flags inconsistent with expected customer behavior.,SAR0062,Filed,2026-05-28

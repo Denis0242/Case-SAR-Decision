@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<workbook version='18.1'>
+<datasources>
+<datasource caption='Investigation Cases' inline='true' name='cases'>
+<connection class='textscan' directory='../data/processed' filename='investigation_cases.csv' separator=',' />
+</datasource>
+<datasource caption='SAR Decisions' inline='true' name='sar'>
+<connection class='textscan' directory='../data/processed' filename='sar_decisions.csv' separator=',' />
+</datasource>
+</datasources>
+<worksheets>
+<worksheet name='Case SAR Trends'/>
+<worksheet name='Case Disposition'/>
+<worksheet name='Red Flags'/>
+<worksheet name='Case Aging Heatmap'/>
+<worksheet name='Amount vs Risk'/>
+<worksheet name='SAR Conversion'/>
+</worksheets>
+<dashboards>
+<dashboard name='AML Case Investigation Dashboard'/>
+<dashboard name='SAR Decision Workbench'/>
+</dashboards>
+</workbook>

@@ -26,28 +26,27 @@ st.caption("Synthetic Financial Crime Analytics portfolio project")
 # -------------------------
 # Dashboard-aligned filters
 # -------------------------
-st.markdown("### Portfolio Filters")
-f1, f2, f3, f4 = st.columns(4)
-
 min_date = C["created_date"].min().date()
 max_date = C["created_date"].max().date()
 
-with f1:
+with st.sidebar:
+    st.header("Portfolio Filters")
+
     date_range = st.date_input(
         "Date Range",
         value=(min_date, max_date),
         min_value=min_date,
         max_value=max_date,
     )
-with f2:
+
     case_type = st.selectbox(
         "Case Type", ["All"] + sorted(C["case_type"].dropna().unique().tolist())
     )
-with f3:
+
     risk_rating = st.selectbox(
         "Risk Rating", ["All"] + sorted(C["priority"].dropna().unique().tolist())
     )
-with f4:
+
     customer_segment = st.selectbox(
         "Customer Segment", ["All"] + sorted(C["customer_type"].dropna().unique().tolist())
     )
@@ -95,6 +94,16 @@ st.divider()
 # -------------------------
 # KPI scorecard
 # -------------------------
+st.markdown("### Portfolio Summary")
+st.write(
+    f"The current filtered portfolio contains **{case_count:,} investigation cases** "
+    f"covering **${reviewed_amount/1e6:.1f}M in reviewed activity**. "
+    f"Of these cases, **{high_critical:,} ({high_pct:.1f}%)** are rated High or Critical, "
+    f"while **{sar_decisions:,} ({decision_pct:.1f}%)** reached a SAR decision. "
+    "The KPI scorecard below provides a quick view of investigation volume, risk exposure, "
+    "SAR outcomes, escalation activity, and the total amount reviewed."
+)
+
 k1, k2, k3, k4, k5, k6 = st.columns(6)
 k1.metric("Total Cases", f"{case_count:,}")
 k2.metric("High / Critical", f"{high_critical:,}", f"{high_pct:.1f}%")

@@ -8,337 +8,306 @@ C = pd.read_csv(ROOT / "data/processed/investigation_cases.csv")
 T = pd.read_csv(ROOT / "data/processed/case_transactions.csv")
 S = pd.read_csv(ROOT / "data/processed/sar_decisions.csv")
 
+C["created_date"] = pd.to_datetime(C["created_date"], errors="coerce")
+T["transaction_date"] = pd.to_datetime(T["transaction_date"], errors="coerce")
+if "filing_date" in S.columns:
+    S["filing_date"] = pd.to_datetime(S["filing_date"], errors="coerce")
+
 st.set_page_config(
-    page_title="AML Case Investigation & SAR Analytics",
-    layout="wide"
+    page_title="AML Case Investigation & SAR Decision Analytics",
+    page_icon="🔎",
+    layout="wide",
 )
 
 st.title("AML Case Investigation & SAR Decision Analytics")
-st.caption(
-    "Synthetic portfolio project | A simple investigation view showing what happened, "
-    "why it matters, and the final AML decision."
-)
-
-with st.sidebar:
-    st.header("Filters")
-    case_types = st.multiselect(
-        "Case Type",
-        sorted(C.case_type.dropna().unique()),
-        default=sorted(C.case_type.dropna().unique())
-    )
-    priorities = st.multiselect(
-        "Priority",
-        sorted(C.priority.dropna().unique()),
-        default=sorted(C.priority.dropna().unique())
-    )
-    dispositions = st.multiselect(
-        "Disposition",
-        sorted(C.disposition.dropna().unique()),
-        default=sorted(C.disposition.dropna().unique())
-    )
-
-F = C[
-    C.case_type.isin(case_types)
-    & C.priority.isin(priorities)
-    & C.disposition.isin(dispositions)
-].copy()
+st.caption("Investigate. Analyze. Decide. | From alerts to defensible outcomes.")
+st.caption("Synthetic Financial Crime Analytics portfolio project")
 
 # -------------------------
-# Portfolio KPIs
+# Dashboard-aligned filters
+# -------------------------
+st.markdown("### Portfolio Filters")
+f1, f2, f3, f4 = st.columns(4)
+
+min_date = C["created_date"].min().date()
+max_date = C["created_date"].max().date()
+
+with f1:
+    date_range = st.date_input(
+        "Date Range",
+        value=(min_date, max_date),
+        min_value=min_date,
+        max_value=max_date,
+    )
+with f2:
+    case_type = st.selectbox(
+        "Case Type", ["All"] + sorted(C["case_type"].dropna().unique().tolist())
+    )
+with f3:
+    risk_rating = st.selectbox(
+        "Risk Rating", ["All"] + sorted(C["priority"].dropna().unique().tolist())
+    )
+with f4:
+    customer_segment = st.selectbox(
+        "Customer Segment", ["All"] + sorted(C["customer_type"].dropna().unique().tolist())
+    )
+
+F = C.copy()
+
+if isinstance(date_range, (tuple, list)) and len(date_range) == 2:
+    start_date, end_date = date_range
+else:
+    start_date = end_date = date_range
+
+F = F[
+    (F["created_date"].dt.date >= start_date)
+    & (F["created_date"].dt.date <= end_date)
+]
+
+if case_type != "All":
+    F = F[F["case_type"].eq(case_type)]
+if risk_rating != "All":
+    F = F[F["priority"].eq(risk_rating)]
+if customer_segment != "All":
+    F = F[F["customer_type"].eq(customer_segment)]
+
+case_ids = set(F["case_id"])
+TF = T[T["case_id"].isin(case_ids)].copy()
+SF = S[S["case_id"].isin(case_ids)].copy()
+
+# -------------------------
+# KPI calculations
 # -------------------------
 case_count = len(F)
-high_critical = F.priority.isin(["High", "Critical"]).sum() if case_count else 0
-sar_decisions = int(F.sar_flag.sum()) if case_count and "sar_flag" in F.columns else 0
-sar_filed = (F.disposition == "SAR Filed").sum() if case_count else 0
-additional_review = (
-    (F.disposition == "Escalate for Additional Review").sum() if case_count else 0
-)
-reviewed_amount = F.reviewed_amount.sum() if case_count and "reviewed_amount" in F.columns else 0
+high_critical = int(F["priority"].isin(["High", "Critical"]).sum())
+sar_decisions = int(F["sar_flag"].sum()) if case_count else 0
+sar_filed = int(F["disposition"].eq("SAR Filed").sum())
+additional_review = int(F["disposition"].eq("Escalate for Additional Review").sum())
+reviewed_amount = float(F["reviewed_amount"].sum()) if case_count else 0.0
+
+high_pct = high_critical / case_count * 100 if case_count else 0
+decision_pct = sar_decisions / case_count * 100 if case_count else 0
+filed_pct = sar_filed / case_count * 100 if case_count else 0
+review_pct = additional_review / case_count * 100 if case_count else 0
+
+st.divider()
 
 # -------------------------
-# Executive Summary
+# KPI scorecard
 # -------------------------
-st.subheader("Executive Summary")
+k1, k2, k3, k4, k5, k6 = st.columns(6)
+k1.metric("Total Cases", f"{case_count:,}")
+k2.metric("High / Critical", f"{high_critical:,}", f"{high_pct:.1f}%")
+k3.metric("SAR Decisions", f"{sar_decisions:,}", f"{decision_pct:.1f}%")
+k4.metric("SAR Filed", f"{sar_filed:,}", f"{filed_pct:.1f}%")
+k5.metric("Additional Review", f"{additional_review:,}", f"{review_pct:.1f}%")
+k6.metric("Reviewed Amount", f"${reviewed_amount/1e6:.1f}M")
 
 if case_count == 0:
-    st.warning("No cases match the selected filters.")
-else:
-    high_risk_pct = high_critical / case_count * 100
-    sar_rate = sar_filed / case_count * 100
-    review_rate = additional_review / case_count * 100
-
-    if sar_filed > 0:
-        overall_status = "Suspicious Activity Identified"
-        summary_message = (
-            "The selected portfolio contains cases that resulted in SAR filings. "
-            "These cases should be treated as the highest-priority outcomes in the investigation population."
-        )
-    elif additional_review > 0:
-        overall_status = "Further Review Required"
-        summary_message = (
-            "No SAR filing is shown in the selected portfolio, but some cases require additional review "
-            "before a final disposition can be reached."
-        )
-    else:
-        overall_status = "No Immediate Escalation"
-        summary_message = (
-            "The selected portfolio does not currently show SAR filings or additional-review dispositions."
-        )
-
-    a, b, c = st.columns([1.2, 1.2, 2.6])
-    with a:
-        st.metric("Portfolio Status", overall_status)
-    with b:
-        st.metric("High/Critical Cases", f"{high_critical:,}")
-    with c:
-        st.info(summary_message)
-
-    st.markdown(
-        f"""
-        The current view contains **{case_count:,} cases**.
-        **{high_risk_pct:.1f}%** are High or Critical priority.
-        **{sar_filed:,} case(s)** resulted in SAR filing and **{additional_review:,} case(s)**
-        were escalated for additional review. The total amount reviewed is approximately
-        **${reviewed_amount/1e6:.1f}M**.
-        """
-    )
-
-    st.markdown("#### What this means")
-    insights = []
-
-    if high_risk_pct >= 40:
-        insights.append(
-            "A large share of the selected population is High/Critical priority, so investigator attention should focus there first."
-        )
-    else:
-        insights.append(
-            "The selected population has a manageable concentration of High/Critical cases."
-        )
-
-    if sar_filed > 0:
-        insights.append(
-            f"{sar_filed} case(s) resulted in a SAR filing, indicating suspicious activity was supported by the investigation."
-        )
-
-    if additional_review > 0:
-        insights.append(
-            f"{additional_review} case(s) still require additional review before the final AML decision is complete."
-        )
-
-    for text in insights:
-        st.write(f"• {text}")
-
-st.divider()
+    st.warning("No cases match the selected filters. Adjust the portfolio filters.")
+    st.stop()
 
 # -------------------------
-# KPI Scorecard
-# -------------------------
-c1, c2, c3, c4, c5, c6 = st.columns(6)
-c1.metric("Cases", f"{case_count:,}")
-c2.metric("High/Critical", f"{high_critical:,}")
-c3.metric("SAR Decisions", f"{sar_decisions:,}")
-c4.metric("SAR Filed", f"{sar_filed:,}")
-c5.metric("Additional Review", f"{additional_review:,}")
-c6.metric("Reviewed Amount", f"${reviewed_amount/1e6:.1f}M")
-
-# -------------------------
-# Case-level explanation
-# -------------------------
-st.subheader("Case Investigation Summary")
-
-available_cases = F.case_id.tolist() if len(F) else C.case_id.tolist()
-selected_case = st.selectbox("Select a case to understand the investigation", available_cases)
-
-case_row = C[C.case_id.eq(selected_case)]
-
-if len(case_row):
-    r = case_row.iloc[0]
-
-    col1, col2, col3, col4 = st.columns(4)
-
-    with col1:
-        st.metric("Case", str(r.get("case_id", "")))
-    with col2:
-        st.metric("Priority", str(r.get("priority", "N/A")))
-    with col3:
-        st.metric("Risk Score", f"{r.get('case_risk_score', 'N/A')}")
-    with col4:
-        st.metric("Disposition", str(r.get("disposition", "N/A")))
-
-    st.markdown("#### Investigation Summary")
-    investigation_summary = r.get("investigation_summary", "")
-    if pd.notna(investigation_summary) and str(investigation_summary).strip():
-        st.info(str(investigation_summary))
-    else:
-        st.info("No narrative investigation summary is available for this case.")
-
-    st.markdown("#### Why this case matters")
-
-    red_flag = r.get("primary_red_flag", "Not available")
-    reviewed_amt = r.get("reviewed_amount", None)
-    priority = r.get("priority", "N/A")
-    disposition = r.get("disposition", "N/A")
-    sar_flag = r.get("sar_flag", 0)
-
-    why_text = f"The primary red flag is **{red_flag}**. "
-    if pd.notna(reviewed_amt):
-        why_text += f"The investigation reviewed approximately **${float(reviewed_amt):,.0f}** in activity. "
-    why_text += f"The case was assigned **{priority}** priority."
-
-    st.write(why_text)
-
-    st.markdown("#### Final Decision")
-
-    if disposition == "SAR Filed" or sar_flag == 1:
-        st.error(
-            "Final decision: **SAR FILED**. The investigation identified sufficient suspicious activity "
-            "to support escalation and regulatory reporting."
-        )
-    elif disposition == "Escalate for Additional Review":
-        st.warning(
-            "Final decision: **ADDITIONAL REVIEW REQUIRED**. The available information raises concerns, "
-            "but further investigation is needed before a final filing decision."
-        )
-    else:
-        st.success(
-            f"Final decision: **{disposition}**. Based on the available investigation record, "
-            "the case did not require SAR filing at this stage."
-        )
-
-    # Optional SAR narrative / reason from sar_decisions dataset
-    sar_record = S[S.case_id.eq(selected_case)] if "case_id" in S.columns else pd.DataFrame()
-    if len(sar_record):
-        sr = sar_record.iloc[0]
-        narrative_cols = [
-            "decision_reason",
-            "sar_rationale",
-            "sar_narrative",
-            "filing_rationale",
-            "decision_summary"
-        ]
-        narrative = None
-        narrative_label = None
-
-        for col in narrative_cols:
-            if col in sar_record.columns and pd.notna(sr.get(col)) and str(sr.get(col)).strip():
-                narrative = str(sr.get(col))
-                narrative_label = col.replace("_", " ").title()
-                break
-
-        if narrative:
-            st.markdown(f"#### {narrative_label}")
-            st.write(narrative)
-
-st.divider()
-
-# -------------------------
-# Detailed tabs
+# Tabs
 # -------------------------
 tabs = st.tabs([
+    "Executive Overview",
     "Case Queue",
     "Case 360",
     "Transaction Lookback",
     "SAR Decisions",
-    "Portfolio Analytics",
-    "Tableau Gallery"
+    "Tableau Gallery",
 ])
 
 with tabs[0]:
-    st.subheader("Case Queue")
-    st.caption(
-        "Cases are sorted by risk and age so a reviewer can quickly identify which investigations deserve attention first."
+    st.subheader("Executive Overview")
+    st.caption("Interactive portfolio analytics aligned to the final Tableau executive dashboard.")
+
+    monthly = (
+        F.assign(month=F["created_date"].dt.to_period("M").dt.to_timestamp())
+        .groupby("month")
+        .agg(
+            Cases=("case_id", "count"),
+            SAR_Decisions=("sar_flag", "sum"),
+            SAR_Filed=("disposition", lambda x: x.eq("SAR Filed").sum()),
+        )
     )
-    st.dataframe(
-        F.sort_values(["case_risk_score", "case_age_days"], ascending=False),
-        use_container_width=True,
-        hide_index=True
+    st.markdown("#### Cases & SAR Decisions Trend")
+    st.line_chart(monthly)
+
+    a, b = st.columns(2)
+    with a:
+        st.markdown("#### Case Disposition")
+        disposition = F["disposition"].value_counts().rename("Cases")
+        st.bar_chart(disposition)
+    with b:
+        st.markdown("#### Top 5 Investigation Red Flags")
+        red_flags = F["primary_red_flag"].value_counts().head(5).rename("Cases")
+        st.bar_chart(red_flags)
+
+    a, b = st.columns(2)
+    with a:
+        st.markdown("#### Case Aging Distribution")
+        aging = pd.cut(
+            F["case_age_days"],
+            bins=[-1, 7, 30, 60, float("inf")],
+            labels=["0–7", "8–30", "31–60", "60+"],
+        ).value_counts(sort=False).rename("Cases")
+        st.bar_chart(aging)
+
+    with b:
+        st.markdown("#### SAR Decision Rate by Case Type")
+        rate = (
+            F.groupby("case_type")["sar_flag"]
+            .mean()
+            .mul(100)
+            .sort_values(ascending=False)
+            .rename("SAR Decision Rate (%)")
+        )
+        st.bar_chart(rate)
+
+    st.markdown("#### Reviewed Amount vs Case Risk")
+    scatter_data = F[["reviewed_amount", "case_risk_score"]].rename(
+        columns={"reviewed_amount": "Reviewed Amount", "case_risk_score": "Case Risk Score"}
     )
+    st.scatter_chart(scatter_data, x="Reviewed Amount", y="Case Risk Score")
+
+    st.markdown("#### Key Insights & Recommended Actions")
+    filing_rate = sar_filed / sar_decisions * 100 if sar_decisions else 0
+    top_flags = F["primary_red_flag"].value_counts().head(2).index.tolist()
+    flag_text = " and ".join(top_flags) if top_flags else "No red flags"
+
+    st.write(
+        f"• **{high_pct:.1f}% ({high_critical:,})** of cases are High/Critical; prioritize elevated-risk investigations."
+    )
+    st.write(
+        f"• **{sar_filed:,} SARs** were filed from **{sar_decisions:,} SAR decisions** "
+        f"(**{filing_rate:.1f}% filing rate among SAR decisions**)."
+    )
+    st.write(
+        f"• **{review_pct:.1f}% ({additional_review:,})** of cases were escalated for additional review."
+    )
+    st.write(f"• **{flag_text}** are the leading red flags in the current filtered population.")
+    st.write("• Focus on timely investigation, complete documentation, and clear decision rationale.")
 
 with tabs[1]:
-    st.subheader("Case 360")
-    st.caption("Complete case-level details for the selected investigation.")
-    st.dataframe(case_row, use_container_width=True, hide_index=True)
-
-    if len(case_row):
-        st.info(case_row.iloc[0].investigation_summary)
+    st.subheader("Case Queue")
+    st.caption("Prioritized investigation queue sorted by case risk score and case age.")
+    queue_cols = [
+        "case_id", "customer_id", "case_type", "created_date", "priority",
+        "case_risk_score", "case_age_days", "primary_red_flag",
+        "reviewed_amount", "disposition"
+    ]
+    st.dataframe(
+        F.sort_values(["case_risk_score", "case_age_days"], ascending=False)[queue_cols],
+        use_container_width=True,
+        hide_index=True,
+    )
 
 with tabs[2]:
-    st.subheader("Transaction Lookback")
-    st.caption(
-        "Transaction history used to understand patterns, unusual behavior, and the activity supporting the investigation."
-    )
-    case_id2 = st.selectbox(
-        "Select case for transaction lookback",
-        available_cases,
-        index=available_cases.index(selected_case) if selected_case in available_cases else 0,
-        key="lookback_case"
-    )
+    st.subheader("Case 360")
+    available_cases = F["case_id"].tolist()
+    selected_case = st.selectbox("Select Investigation Case", available_cases, key="case360")
+    r = F[F["case_id"].eq(selected_case)].iloc[0]
 
-    tx = T[T.case_id.eq(case_id2)].sort_values("transaction_date", ascending=False)
+    c1, c2, c3, c4 = st.columns(4)
+    c1.metric("Case", r["case_id"])
+    c2.metric("Risk Rating", r["priority"])
+    c3.metric("Case Risk Score", f"{r['case_risk_score']}")
+    c4.metric("Disposition", r["disposition"])
+
+    st.markdown("#### Customer / KYC Context")
+    customer_view = pd.DataFrame([{
+        "Customer ID": r["customer_id"],
+        "Customer": r["customer_name"],
+        "Segment": r["customer_type"],
+        "Country": r["country"],
+        "KYC Risk": r["kyc_risk"],
+        "PEP Flag": "Yes" if r["pep_flag"] == 1 else "No",
+        "Expected Monthly Volume": f"${r['expected_monthly_volume']:,.0f}",
+    }])
+    st.dataframe(customer_view, use_container_width=True, hide_index=True)
+
+    st.markdown("#### Investigation Context")
+    i1, i2, i3, i4 = st.columns(4)
+    i1.metric("Primary Red Flag", r["primary_red_flag"])
+    i2.metric("Red Flag Count", f"{r['red_flag_count']}")
+    i3.metric("Transactions Reviewed", f"{r['reviewed_txn_count']:,}")
+    i4.metric("Reviewed Amount", f"${r['reviewed_amount']:,.0f}")
+
+    st.markdown("#### Investigation Summary")
+    st.info(str(r["investigation_summary"]))
+
+    st.markdown("#### Decision Rationale")
+    st.write(str(r["sar_decision_reason"]))
+
+    st.markdown("#### Final Decision")
+    if r["disposition"] == "SAR Filed":
+        st.error("SAR FILED — the synthetic investigation record supports a filing outcome.")
+    elif r["disposition"] == "SAR Recommended":
+        st.warning("SAR RECOMMENDED — the case reached a SAR recommendation outcome.")
+    elif r["disposition"] == "Escalate for Additional Review":
+        st.warning("ADDITIONAL REVIEW REQUIRED — further investigation is required before closure.")
+    else:
+        st.success("CLOSE — NO SUSPICION — the case did not require SAR escalation at this stage.")
+
+with tabs[3]:
+    st.subheader("Transaction Lookback")
+    lookback_case = st.selectbox(
+        "Select Case for Transaction Lookback",
+        F["case_id"].tolist(),
+        key="lookback",
+    )
+    tx = TF[TF["case_id"].eq(lookback_case)].sort_values("transaction_date", ascending=False)
+
+    t1, t2, t3 = st.columns(3)
+    t1.metric("Transactions Reviewed", f"{len(tx):,}")
+    t2.metric("Transaction Value", f"${tx['amount'].sum():,.0f}")
+    t3.metric("High-Risk Geography Txns", f"{int(tx['high_risk_geo_flag'].sum()):,}")
+
     st.dataframe(tx, use_container_width=True, hide_index=True)
 
     if len(tx):
-        st.markdown("##### Transaction Summary")
-        amount_cols = ["amount", "transaction_amount", "txn_amount"]
-        amount_col = next((c for c in amount_cols if c in tx.columns), None)
-
-        t1, t2 = st.columns(2)
-        with t1:
-            st.metric("Transactions Reviewed", f"{len(tx):,}")
-        with t2:
-            if amount_col:
-                st.metric("Transaction Value", f"${tx[amount_col].sum():,.0f}")
-            else:
-                st.metric("Transaction Value", "See transaction table")
-
-with tabs[3]:
-    st.subheader("SAR Decisions")
-    st.caption(
-        "Shows final filing decisions and supporting case information for regulatory-reporting outcomes."
-    )
-    sort_cols = [c for c in ["case_risk_score", "filing_date"] if c in S.columns]
-    if sort_cols:
-        st.dataframe(
-            S.sort_values(sort_cols, ascending=False),
-            use_container_width=True,
-            hide_index=True
-        )
-    else:
-        st.dataframe(S, use_container_width=True, hide_index=True)
+        st.markdown("#### Activity by Channel")
+        st.bar_chart(tx.groupby("channel")["amount"].sum().sort_values(ascending=False))
 
 with tabs[4]:
-    st.subheader("Portfolio Analytics")
-    a, b = st.columns(2)
+    st.subheader("SAR Decisions")
+    st.caption("SAR decision and filing records associated with the filtered case population.")
 
-    with a:
-        st.markdown("##### Primary Red Flags")
-        st.caption("Shows the most common reasons cases entered or progressed through investigation.")
-        if len(F):
-            st.bar_chart(F.primary_red_flag.value_counts())
+    d1, d2, d3 = st.columns(3)
+    d1.metric("SAR Decisions", f"{sar_decisions:,}")
+    d2.metric("SAR Filed", f"{sar_filed:,}")
+    d3.metric(
+        "Filing Rate",
+        f"{(sar_filed / sar_decisions * 100 if sar_decisions else 0):.1f}%"
+    )
 
-    with b:
-        st.markdown("##### Final Case Dispositions")
-        st.caption("Shows how investigations ended across the selected case population.")
-        if len(F):
-            st.bar_chart(F.disposition.value_counts())
+    if len(SF):
+        sort_cols = [c for c in ["case_risk_score", "filing_date"] if c in SF.columns]
+        st.dataframe(
+            SF.sort_values(sort_cols, ascending=False) if sort_cols else SF,
+            use_container_width=True,
+            hide_index=True,
+        )
+    else:
+        st.info("No SAR decision records match the current filters.")
 
 with tabs[5]:
     st.subheader("Tableau Gallery")
-    st.caption(
-        "Static Tableau portfolio views for quick recruiter and hiring-manager review."
-    )
+    st.caption("Final executive dashboard aligned with the processed project data and verified KPI results.")
 
-    kpi_img = ROOT / "images/01_kpi_scorecard.png"
     executive_img = ROOT / "images/02_executive_dashboard.png"
-
-    if kpi_img.exists():
-        st.markdown("##### KPI Scorecard")
-        st.image(str(kpi_img), use_container_width=True)
-
     if executive_img.exists():
-        st.markdown("##### Executive Dashboard")
-        st.image(str(executive_img), use_container_width=True)
+        st.image(
+            str(executive_img),
+            caption="AML Case Investigation & SAR Decision Analytics — Executive Dashboard",
+            use_container_width=True,
+        )
+    else:
+        st.info("Add `02_executive_dashboard.png` to the `images/` folder.")
 
+st.divider()
 st.caption(
-    "Synthetic educational portfolio project. No real bank, customer, case, or SAR data."
+    "Synthetic educational portfolio project. No real customer, bank, investigation case, or SAR data is included."
 )

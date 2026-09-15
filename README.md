@@ -1,63 +1,158 @@
 # AML Case Investigation & SAR Decision Analytics
 
-Project 5 in the Financial Crime Analytics portfolio.
+**Financial Crime Analytics Portfolio Project**
 
-This project is intentionally different from Project 1. Project 1 focuses on transaction-monitoring alerts. Project 5 begins after an alert has been escalated into an investigation case.
+An end-to-end AML investigation project using **Python, SQL, Tableau,
+and Streamlit** to connect customer/KYC context, transaction lookback
+analysis, investigation red flags, case prioritization, disposition
+outcomes, and SAR decision support.
 
-## Scale
-- 900 synthetic customers
-- 22,000 synthetic transactions
-- 240 investigation cases
-- 62 SAR recommendations / filing decisions
 
-## Workflow
-Escalated alert → case creation → KYC review → transaction lookback → red-flag analysis → investigation summary → disposition → SAR decision.
+------------------------------------------------------------------------
 
-## Tools
-SQL, Python, Tableau, Streamlit.
+## Analytical Workflow
 
-## Separate KPI Visualization
-The project includes a standalone KPI scorecard:
-1. Total Cases
-2. High/Critical Cases
-3. SAR Decisions
-4. SAR Filed
-5. Additional Review
-6. Reviewed Amount
+``` text
+Customer / KYC Context
+        ↓
+Transaction Review
+        ↓
+Escalated Investigation Case
+        ↓
+Transaction Lookback
+        ↓
+Red-Flag & Risk Analysis
+        ↓
+Investigation Summary
+        ↓
+Case Disposition
+        ↓
+SAR Recommendation / Filing Decision
+        ↓
+Portfolio & Executive Reporting
+```
+
+------------------------------------------------------------------------
 
 ## Executive Dashboard
-Exactly six analytical visualizations:
-1. Case & SAR Trends
-2. Case Disposition donut
-3. Top Investigation Red Flags
-4. Case Aging Heatmap with numbers inside cells
-5. Reviewed Amount vs Case Risk scatter
-6. SAR Conversion by Case Type
 
-The final approved dashboard uses one visualization color only: blue, with lighter and darker blue shades where separation is required. Dates use MM/YY such as 07/26.
+![AML Case Investigation & SAR Decision Analytics — Executive Dashboard](images/02_executive_dashboard.png)
 
-## Dashboard Preview
+The Executive Dashboard summarizes the current processed-data results, including **240 total cases, 128 High/Critical cases, 62 SAR decisions, 35 SAR filings, 62 cases escalated for additional review, and $23.5M in reviewed amount**.
 
-### KPI Scorecard
+------------------------------------------------------------------------
 
-![AML Case Investigation KPI Scorecard](images/01_kpi_scorecard.png)
+## Tools & Technologies
 
-### Executive Dashboard
+  -----------------------------------------------------------------------
+  Tool                                Use
+  ----------------------------------- -----------------------------------
+  **Python / Pandas**                 EDA, validation, feature
+                                      engineering and case analysis
 
-![AML Case Investigation Executive Dashboard](images/02_executive_dashboard.png)
+  **SQL**                             Investigation queues, aging, red
+                                      flags, lookback and SAR analysis
 
-### Cases and SAR Decisions Trend
+  **Tableau**                         Executive investigation dashboard
 
-![Cases and SAR Decisions Trend](images/03_cases_sar_decisions_trend.png)
+  **Streamlit**                       Case 360, transaction lookback and
+                                      decision support
 
-### Top 5 Investigation Red Flags
+  **Jupyter Notebook**                Reproducible analysis
 
-![Top 5 Investigation Red Flags](images/04_top_investigation_red_flags.png)
+  **Git / GitHub**                    Version control and portfolio
+                                      presentation
+  -----------------------------------------------------------------------
 
+<<<<<<< HEAD
 
+=======
+------------------------------------------------------------------------
+
+## Repository Structure
+
+``` text
+Case-SAR-Decision/
+├── app/             # Streamlit investigation application
+├── data/            # Raw and processed synthetic datasets
+├── docs/            # Data dictionary and supporting documentation
+├── images/          # Executive dashboard image
+├── notebooks/       # Python EDA, feature engineering and investigation analysis
+├── sql/             # Investigation and SAR analysis queries
+├── tableau/         # Tableau workbook / assets if included
+├── .gitignore
+├── .python-version
+├── pyproject.toml
+├── requirements.txt
+├── uv.lock
+└── README.md
+```
+
+------------------------------------------------------------------------
+
+## How to Run
+
+``` bash
+git clone https://github.com/Denis0242/Case-SAR-Decision.git
+cd Case-SAR-Decision
+pip install -r requirements.txt
+streamlit run app/streamlit_app.py
+```
+
+------------------------------------------------------------------------
+
+## Skills Demonstrated
+
+### AML / Financial Crime
+
+-   AML Case Investigation
+-   Transaction Lookback Analysis
+-   KYC Context Review
+-   Red-Flag Identification
+-   Case Risk Assessment
+-   Investigation Prioritization
+-   Case Disposition Analysis
+-   SAR Decision Analytics
+-   Investigation Narrative Review
+-   Financial Crime Decision Support
+
+### Data & Analytics
+
+-   Exploratory Data Analysis
+-   Data Quality Validation
+-   Feature Engineering
+-   SQL Analysis
+-   Python / Pandas
+-   KPI Development
+-   Risk Segmentation
+-   Pattern & Trend Analysis
+-   Case-Level Analytics
+
+### Reporting & Visualization
+
+-   Tableau
+-   Streamlit
+-   Case 360 Reporting
+-   Executive KPI Reporting
+-   Interactive Analytics
+-   Data Storytelling
+
+------------------------------------------------------------------------
+>>>>>>> e8b4f44 (Make changes to the Readme and Streamlit)
 
 ## Disclaimer
-All customers, transactions, investigation cases, notes, and SAR decisions are synthetic and created for educational portfolio use only.
 
+This project uses **synthetic data** created for educational and
+portfolio purposes. No real customer, account, transaction,
+investigation case, SAR, analyst, or confidential financial-institution
+data is included.
 
+<<<<<<< HEAD
 
+=======
+Case-risk scores, red flags, investigation summaries, dispositions, SAR
+recommendations, filing decisions, and analytical thresholds are
+illustrative. They demonstrate AML investigation and financial-crime
+analytics workflows and should not be interpreted as actual bank
+policies, regulatory determinations, or regulatory filings.
+>>>>>>> e8b4f44 (Make changes to the Readme and Streamlit)

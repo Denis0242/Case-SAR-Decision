@@ -1,8 +1,6 @@
 # AML Case Investigation & SAR Decision Analytics
 
-**Live App:** [Sreamlit](https://case-sar-decision-lbx7y2bqmgkfmaw4aazf7k.streamlit.app)
-
-**Financial Crime Analytics Portfolio Project**
+### Financial Crime Analytics Portfolio Project
 
 An end-to-end AML investigation and decision-support project using **Python, SQL, Tableau, and Streamlit** to connect customer/KYC context, transaction lookback analysis, investigation red flags, case prioritization, case disposition, and SAR decision outcomes.
 
